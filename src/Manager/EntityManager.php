@@ -26,7 +26,7 @@ class EntityManager
         } catch (\Throwable $e) {
             var_dump($e); die;
         }
-        
+
         $this->connection->exec(
             'CREATE TABLE IF NOT EXISTS cities 
             (id TEXT PRIMARY KEY, name TEXT, zone TEXT, department TEXT, zip_codes TEXT, 

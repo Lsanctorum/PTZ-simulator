@@ -51,6 +51,7 @@ function postForm(e) {
 
 
 const map = L.map('map');
+const markers = [];
 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
     attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
     minZoom: 1,
@@ -118,10 +119,14 @@ function updateMap(latLng) {
         mapElt.classList.remove('hidden');
     }
     map.setView(latLng, 11);
+
+    //clean map markers
+    cleanMarkers();
     document.querySelectorAll('.results table tbody tr')
         .forEach(tr => {
             const latitude = tr.getAttribute('data-lat');
             const longitude = tr.getAttribute('data-lng');
+            const id = tr.getAttribute('data-id');
 
             const minPrice = tr.querySelector('[data-min-price]').textContent;
             const minPtz = tr.querySelector('[data-min-ptz]').textContent;
@@ -133,10 +138,7 @@ function updateMap(latLng) {
                 content = `Montant: ${minPrice}<br /> PTZ: ${minPtz}<br /> Max: ${maxPrice} <br /> PTZ: ${maxPtz}`;
             }
 
-            L
-                .marker(L.latLng(latitude, longitude))
-                .addTo(map)
-                .bindPopup(content);
+            makeMarker(id, latitude, longitude);
         })
 }
 
@@ -162,6 +164,30 @@ function removeCities(e) {
     document
         .querySelectorAll('div.results table tbody td input[type=checkbox]:checked')
         .forEach(checkbox => {
+            const tr = checkbox.closest('tr');
+            const id = tr.getAttribute('data-id');
+            removeMarker(id);
             checkbox.closest('tr').remove();
         })
 }
+
+function removeMarker(id) {
+    markers[id].remove();
+    markers.slice(id, 1);
+}
+
+function cleanMarkers() {
+    markers.forEach(marker => {
+        marker.remove();
+    });
+    markers.pop();
+}
+
+function makeMarker(id, latitude, longitude) {
+    const marker = L.marker(L.latLng(latitude, longitude));
+    markers[id] = marker;
+    marker
+        .addTo(map)
+        .bindPopup(content);
+}
+

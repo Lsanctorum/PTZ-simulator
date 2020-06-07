@@ -142,7 +142,7 @@ class CityRepository
             ->prepare(
                 sprintf(
                     'SELECT %s FROM %s WHERE id IN (%s) ORDER BY name ASC',
-                    $this->getDefaultFields(),
+                    $this->getDefaultFields(['latitude', 'longitude']),
                     self::TABLE,
                     implode(', ', array_fill(0, count($ids), '?'))
                 )

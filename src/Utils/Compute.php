@@ -19,6 +19,10 @@ class Compute
      */
     public static function getMiddleCoordinate(array $coordinates): float
     {
+        if (1 === count($coordinates)) {
+            return $coordinates[0];
+        }
+
         $closest = null;
         $search = (array_sum($coordinates) / count($coordinates));
         foreach ($coordinates as $item) {

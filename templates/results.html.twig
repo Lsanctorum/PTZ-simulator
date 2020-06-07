@@ -31,7 +31,7 @@
                 </thead>
                 <tbody>
                 {% for ptz in results %}
-                    <tr class="pointer" data-lat="{{ ptz.city.latitude }}" data-lng="{{ ptz.city.longitude }}">
+                    <tr class="pointer" data-id="{{ ptz.city.id }}" data-lat="{{ ptz.city.latitude }}" data-lng="{{ ptz.city.longitude }}">
                         <td class="d-print-none">
                             <input id="{{ ptz.code }}" type="checkbox">
                         </td>
