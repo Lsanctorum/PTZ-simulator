@@ -52,10 +52,10 @@ function postForm(e) {
 
 const map = L.map('map');
 const markers = [];
-let table = null
+let table = null;
 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
     attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
-    minZoom: 1,
+    minZoom: 5,
     maxZoom: 20
 }).addTo(map);
 
