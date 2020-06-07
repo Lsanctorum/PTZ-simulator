@@ -2,7 +2,6 @@
 
 use PtzSimulator\Manager\CityManager;
 use PtzSimulator\Twig\PriceExtension;
-use PtzSimulator\Utils\Compute;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
@@ -50,26 +49,9 @@ if (!empty($_POST['compute']) && true == $_POST['compute']) {
         $results[] = $ptz;
     }
 
-    /**
-     * @var \PtzSimulator\Entity\Ptz $ptz
-     */
-    foreach ($results as $ptz) {
-        /** @var \PtzSimulator\Entity\City $city */
-        $city = $ptz->getCity();
-        $lat[] = $city->getLatitude();
-        $lng[] = $city->getLongitude();
-    }
-
-    if (!empty($lat) && !empty($lng)) {
-        $latLng = [
-            'lat' => Compute::getMiddleCoordinate($lat),
-            'lng' => Compute::getMiddleCoordinate($lng)
-        ];
-    }
-
     echo json_encode([
         'template' => $twig->render('results.html.twig', ['results' => $results ?? []]),
-        'latLng' => $latLng ?? null
+        'hasData' => !empty($results)
     ]);
     return;
 }

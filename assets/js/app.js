@@ -40,11 +40,11 @@ function postForm(e) {
         .then(data => {
             document.querySelector('.results')
                 .innerHTML = data.template;
-            if (data.latLng) {
+            if (data.hasData) {
                 initSelectionCheckboxes();
                 initBtnRemove();
                 initBtnExport();
-                updateMap(data.latLng);
+                updateMap();
             }
         })
 }
@@ -114,15 +114,15 @@ function initBtnExport() {
     });
 }
 
-function updateMap(latLng) {
+function updateMap() {
     const mapElt = document.querySelector('#map');
     if (mapElt.classList.contains('hidden')) {
         mapElt.classList.remove('hidden');
     }
-    map.setView(latLng, 11);
 
     //clean map markers
     cleanMarkers();
+    const latLngs = [];
     document.querySelectorAll('.results table tbody tr')
         .forEach(tr => {
             const latitude = tr.getAttribute('data-lat');
@@ -140,7 +140,12 @@ function updateMap(latLng) {
             }
 
             makeMarker(id, latitude, longitude);
-        })
+            latLngs.push([latitude, longitude]);
+        });
+
+    1 === latLngs.length
+        ? map.setView(latLngs[0], 11)
+        : map.fitBounds(L.latLngBounds(latLngs));
 }
 
 function initSelectionCheckboxes() {
