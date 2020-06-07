@@ -1,0 +1,19 @@
+{
+    "name": "lsanctorum/ptz_simulator",
+    "description": "Simulate your max good price to get ptz",
+    "type": "project",
+    "require": {
+        "php": ">=7.3",
+        "ext-json": "*",
+        "ext-pdo": "*",
+        "halaxa/json-machine": "^0.3.3",
+        "twig/twig": "^3.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PtzSimulator\\": "src/"
+        }
+    },
+    "require-dev": {
+    }
+}

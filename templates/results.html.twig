@@ -1,0 +1,57 @@
+<div class="row mx-auto mt-5">
+    <div class="col-sm-12">
+        {% if results|length > 0 %}
+            <div class="d-print-none">
+                <h3>Résultats</h3>
+                <p>
+                    Vous avez la possibilité de retirer les lignes qui ne vous intéressent pas en sélectionnant les
+                    cases à
+                    cocher et cliquant sur le bouton "retirer"
+                </p>
+                <p>
+                    <button class="btn btn-info remove-cities">Retirer les lignes sélectionnées</button>
+                    <span class="text-right">
+                </span>
+                </p>
+            </div>
+            <table id="results-table" class="table table-hover text-center table-dark">
+                <thead>
+                <tr>
+                    <th class="d-print-none" scope="col">#</th>
+                    <th scope="col">Ville</th>
+                    <th scope="col">Zone</th>
+                    <th scope="col">Revenu fiscal de référence</th>
+                    <th scope="col">Nombre d'occupants du bien</th>
+
+                    <th scope="col">Montant</th>
+                    <th scope="col">Montant du prêt</th>
+                    <th scope="col">Montant maxi.</th>
+                    <th scope="col">Montant du prêt</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for ptz in results %}
+                    <tr class="pointer" data-lat="{{ ptz.city.latitude }}" data-lng="{{ ptz.city.longitude }}">
+                        <td class="d-print-none">
+                            <input id="{{ ptz.code }}" type="checkbox">
+                        </td>
+                        <td>{{ ptz.city.name|raw }} ({{ ptz.city.department|raw }})</td>
+                        <td>{{ ptz.city.zone|raw }}</td>
+                        <td>{{ ptz.fiscalRevenue|price }}</td>
+                        <td>{{ ptz.people|raw }}</td>
+                        <td data-min-price>{{ ptz.results.min.price|price }}</td>
+                        <td data-min-ptz>{{ ptz.results.min.amountPtz|price }}</td>
+                        <td data-max-price>{{ ptz.results.max.price|price }}</td>
+                        <td data-max-ptz>{{ ptz.results.max.amountPtz|price }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        {% elseif results is defined and results is not null and results|length is same as(0) %}
+            <div class="alert alert-info text-center">
+                Aucun résultat trouvé
+            </div>
+        {% endif %}
+    </div>
+</div>
+
