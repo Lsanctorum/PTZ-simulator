@@ -52,6 +52,7 @@ function postForm(e) {
 
 const map = L.map('map');
 const markers = [];
+let table = null
 L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
     attribution: 'données © <a href="//osm.org/copyright">OpenStreetMap</a>/ODbL - rendu <a href="//openstreetmap.fr">OSM France</a>',
     minZoom: 1,
@@ -67,7 +68,7 @@ function initBtnRemove() {
 }
 
 function initBtnExport() {
-    $('#results-table').DataTable({
+    table = $('#results-table').DataTable({
         language: {
             processing: "Traitement en cours...",
             search: "Rechercher&nbsp;:",
@@ -167,7 +168,10 @@ function removeCities(e) {
             const tr = checkbox.closest('tr');
             const id = tr.getAttribute('data-id');
             removeMarker(id);
-            checkbox.closest('tr').remove();
+            table
+                .row(tr)
+                .remove()
+                .draw();
         })
 }
 
