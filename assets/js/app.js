@@ -133,13 +133,13 @@ function updateMap() {
             const minPtz = tr.querySelector('[data-min-ptz]').textContent;
             const maxPrice = tr.querySelector('[data-max-price]').textContent;
             const maxPtz = tr.querySelector('[data-max-ptz]').textContent;
-
+            
             let content = `Montant: ${minPrice}<br /> Max: ${maxPrice}<br /> PTZ: ${minPtz}`;
             if (maxPtz !== minPtz) {
                 content = `Montant: ${minPrice}<br /> PTZ: ${minPtz}<br /> Max: ${maxPrice} <br /> PTZ: ${maxPtz}`;
             }
 
-            makeMarker(id, latitude, longitude);
+            makeMarker(id, latitude, longitude, content);
             latLngs.push([latitude, longitude]);
         });
 
@@ -192,7 +192,7 @@ function cleanMarkers() {
     markers.pop();
 }
 
-function makeMarker(id, latitude, longitude) {
+function makeMarker(id, latitude, longitude, content) {
     const marker = L.marker(L.latLng(latitude, longitude));
     markers[id] = marker;
     marker
