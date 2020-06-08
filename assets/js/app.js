@@ -62,9 +62,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.fr/osmfr/{z}/{x}/{y}.png', {
 //Part with table results
 
 function initBtnRemove() {
-    const btnRemoveLines = document.querySelector('button.remove-cities');
-    btnRemoveLines.addEventListener('click', e => removeCities(e));
-    btnRemoveLines.addEventListener('click', removeCities);
+    document
+        .querySelectorAll('button.remove-cities')
+        .forEach(btn => {
+            btn.addEventListener('click', e => removeCities(e));
+            btn.addEventListener('click', removeCities);
+        })
 }
 
 function initBtnExport() {
@@ -102,7 +105,7 @@ function initBtnExport() {
                 orientation: 'landscape',
                 pageSize: 'LEGAL',
                 exportOptions: {
-                    columns: ':not(.d-print-none)'
+                    columns: ':not(not-export)'
                 },
                 customize: doc => {
                     doc.content[1].table.widths =
@@ -125,22 +128,24 @@ function updateMap() {
     const latLngs = [];
     document.querySelectorAll('.results table tbody tr')
         .forEach(tr => {
-            const latitude = tr.getAttribute('data-lat');
-            const longitude = tr.getAttribute('data-lng');
-            const id = tr.getAttribute('data-id');
+            const trDataSet = tr.dataset;
+            console.log(tr);
 
-            const minPrice = tr.querySelector('[data-min-price]').textContent;
-            const minPtz = tr.querySelector('[data-min-ptz]').textContent;
-            const maxPrice = tr.querySelector('[data-max-price]').textContent;
-            const maxPtz = tr.querySelector('[data-max-ptz]').textContent;
-            
-            let content = `Montant: ${minPrice}<br /> Max: ${maxPrice}<br /> PTZ: ${minPtz}`;
-            if (maxPtz !== minPtz) {
-                content = `Montant: ${minPrice}<br /> PTZ: ${minPtz}<br /> Max: ${maxPrice} <br /> PTZ: ${maxPtz}`;
-            }
+            const ptz = {
+                city : {
+                    id: trDataSet.id,
+                    lat: trDataSet.lat,
+                    lng: trDataSet.lng,
+                    name: tr.querySelector('[data-city]').textContent
+                },
+                minPrice: tr.querySelector('[data-min-price]').textContent,
+                minPtz: tr.querySelector('[data-min-ptz]').textContent,
+                maxPrice: tr.querySelector('[data-max-price]').textContent,
+                maxPtz: tr.querySelector('[data-max-ptz]').textContent
+            };
 
-            makeMarker(id, latitude, longitude, content);
-            latLngs.push([latitude, longitude]);
+            makeMarker(ptz);
+            latLngs.push([ptz.city.lat, ptz.city.lng]);
         });
 
     1 === latLngs.length
@@ -192,11 +197,19 @@ function cleanMarkers() {
     markers.pop();
 }
 
-function makeMarker(id, latitude, longitude, content) {
-    const marker = L.marker(L.latLng(latitude, longitude));
-    markers[id] = marker;
+function makeMarker(ptz) {
+    let popUpContent = `<strong>${ptz.city.name}</strong><br />`;
+    let content = `Montant: ${ptz.minPrice}<br /> Max: ${ptz.maxPrice}<br /> PTZ: ${ptz.minPtz}`;
+    if (ptz.maxPrice !== ptz.minPrice) {
+        content = `Montant: ${ptz.minPrice}<br /> PTZ: ${ptz.minPtz}<br /> Max: ${ptz.maxPrice} <br /> PTZ: ${ptz.maxPtz}`;
+    }
+
+    popUpContent += content;
+
+    const marker = L.marker(L.latLng(ptz.city.lat, ptz.city.lng));
+    markers[ptz.city.id] = marker;
     marker
         .addTo(map)
-        .bindPopup(content);
+        .bindPopup(popUpContent);
 }
 

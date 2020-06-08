@@ -9,15 +9,13 @@
                     cocher et cliquant sur le bouton "retirer"
                 </p>
                 <p>
-                    <button class="btn btn-info remove-cities">Retirer les lignes sélectionnées</button>
-                    <span class="text-right">
-                </span>
+                    {% include '_remove_cities.html.twig' %}
                 </p>
             </div>
             <table id="results-table" class="table table-hover text-center table-dark">
                 <thead>
                 <tr>
-                    <th class="d-print-none" scope="col">#</th>
+                    <th class="not-export" scope="col">#</th>
                     <th scope="col">Ville</th>
                     <th scope="col">Zone</th>
                     <th scope="col">Revenu fiscal de référence</th>
@@ -31,11 +29,13 @@
                 </thead>
                 <tbody>
                 {% for ptz in results %}
-                    <tr class="pointer" data-id="{{ ptz.city.id }}" data-lat="{{ ptz.city.latitude }}" data-lng="{{ ptz.city.longitude }}">
-                        <td class="d-print-none">
+                    <tr class="pointer" data-id="{{ ptz.city.id }}"
+                        data-lat="{{ ptz.city.latitude }}"
+                        data-lng="{{ ptz.city.longitude }}">
+                        <td class="not-export">
                             <input id="{{ ptz.code }}" type="checkbox">
                         </td>
-                        <td>{{ ptz.city.name|raw }} ({{ ptz.city.department|raw }})</td>
+                        <td data-city> {{ ptz.city.name|raw }} ({{ ptz.city.department|raw }})</td>
                         <td>{{ ptz.city.zone|raw }}</td>
                         <td>{{ ptz.fiscalRevenue|price }}</td>
                         <td>{{ ptz.people|raw }}</td>
@@ -47,6 +47,9 @@
                 {% endfor %}
                 </tbody>
             </table>
+            <p class="mt-3">
+                {% include '_remove_cities.html.twig' %}
+            </p>
         {% elseif results is defined and results is not null and results|length is same as(0) %}
             <div class="alert alert-info text-center">
                 Aucun résultat trouvé
@@ -54,4 +57,3 @@
         {% endif %}
     </div>
 </div>
-
