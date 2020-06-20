@@ -105,7 +105,7 @@ function initBtnExport() {
                 orientation: 'landscape',
                 pageSize: 'LEGAL',
                 exportOptions: {
-                    columns: ':not(not-export)'
+                    columns: ':not(.not-export)'
                 },
                 customize: doc => {
                     doc.content[1].table.widths =
